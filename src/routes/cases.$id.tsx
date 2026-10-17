@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm";
 import { Field, Label, Select } from "@/components/ui/field";
 import { SlideOver } from "@/components/ui/slide-over";
+import { useAutomation } from "@/lib/automation/use-automation";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { formatDay } from "@/lib/dates";
 import { FLOW_COPY, t } from "@/lib/desk/copy";
@@ -49,6 +50,13 @@ function CasePage() {
       .then(setBundle)
       .catch(() => setMissing(true));
   }, [user, id]);
+
+  // A finished portal job wrote to a step (filed date, reply, status finding): reload the case.
+  const { automation, refreshAutomation } = useAutomation(user ? id : null, () => {
+    getCase({ data: { id } })
+      .then(setBundle)
+      .catch(() => {});
+  });
 
   const views = useMemo(() => (bundle ? stepViews(bundle.record, bundle.steps, today) : []), [bundle, today]);
   const next = useMemo(() => (bundle ? nextAction(bundle.record, views, today) : null), [bundle, views, today]);
@@ -238,6 +246,8 @@ function CasePage() {
                 today={today}
                 prices={wallet?.prices ?? null}
                 onBundle={setBundle}
+                automation={automation}
+                onAutomation={() => void refreshAutomation()}
               />
             ))}
           </ol>

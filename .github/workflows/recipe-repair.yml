@@ -1,0 +1,126 @@
+name: recipe-repair
+
+# A recipe no longer matches its portal. Claude reads the redacted evidence,
+# rewrites the recipe and its baseline, runs the recipe tests, and this
+# workflow opens a PR. recipe-automerge.yml then decides: read-only recipes
+# merge once CI is green; anything that can submit waits for a human.
+#
+# Triggers:
+#   repository_dispatch "recipe-broken"  ArziDesk saw drift on a live job or kiosk canary
+#   workflow_call (source: canary)       the daily CI canary saw drift
+#   workflow_dispatch                    by hand
+#
+# Secrets: ANTHROPIC_API_KEY; ARZIDESK_URL + REPAIR_BUNDLE_SECRET (live evidence);
+# REPAIR_PR_TOKEN, a fine-grained token with contents + pull-requests write, so
+# the PR triggers CI (PRs opened with GITHUB_TOKEN do not run workflows).
+
+on:
+  repository_dispatch:
+    types: [recipe-broken]
+  workflow_call:
+    inputs:
+      source:
+        type: string
+        default: canary
+  workflow_dispatch:
+    inputs:
+      recipeId:
+        description: Recipe id, e.g. rtionline.status
+        required: true
+      stepId:
+        description: Step id, e.g. status_form
+        required: true
+      jobId:
+        description: Failed job id (optional)
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: recipe-repair-${{ github.event.client_payload.recipeId || inputs.recipeId || 'canary' }}
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      RECIPE_ID: ${{ github.event.client_payload.recipeId || inputs.recipeId || '' }}
+      STEP_ID: ${{ github.event.client_payload.stepId || inputs.stepId || '' }}
+      JOB_ID: ${{ github.event.client_payload.jobId || inputs.jobId || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPAIR_PR_TOKEN || github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+
+      - name: Evidence from ArziDesk (redacted bundle)
+        if: env.RECIPE_ID != ''
+        env:
+          ARZIDESK_URL: ${{ secrets.ARZIDESK_URL }}
+          REPAIR_BUNDLE_SECRET: ${{ secrets.REPAIR_BUNDLE_SECRET }}
+        run: |
+          mkdir -p .repair
+          curl -fsS -G "$ARZIDESK_URL/api/automation/repair-bundle" \
+            --data-urlencode "recipeId=$RECIPE_ID" --data-urlencode "stepId=$STEP_ID" --data-urlencode "jobId=$JOB_ID" \
+            -H "Authorization: Bearer $REPAIR_BUNDLE_SECRET" -o .repair/bundle.json
+      - name: Evidence from the CI canary
+        if: env.RECIPE_ID == ''
+        uses: actions/download-artifact@v4
+        with:
+          name: canary-report
+          path: .repair
+      - name: Live public pages now
+        run: npm run --silent companion -- canary --offline --report .repair/canary-now.json || true
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: >-
+            --model claude-opus-5-5
+            --max-turns 60
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(npm run companion:test),Bash(npm run typecheck),Bash(npm run --silent companion -- canary:*),Bash(node --test:*),Bash(git diff:*),Bash(git status)"
+          prompt: |
+            A portal recipe in this repository no longer matches the government portal it automates.
+            Evidence is in .repair/: bundle.json (from a failed live job or kiosk canary: error, failing step,
+            field inventories before/after, redacted DOM) and/or canary-report.json / canary-now.json (CI canary:
+            verdicts and redacted public pages). Recipe hint: "${{ env.RECIPE_ID }}" step "${{ env.STEP_ID }}".
+
+            Read docs/automation.md, companion/recipes/types.ts and the failing recipe before changing anything.
+
+            Rules:
+            - Change only what the evidence shows moved: labels, field names, buttons, page order.
+              Keep every human gate (terms, captcha, OTP, payment, assist). Never automate a gate away.
+            - Never weaken kit.verify(), kit.submit() or the after_submit_unknown handling in submit recipes.
+            - Recipes import types only (`import type`); everything at run time comes through `kit`.
+            - Bump the recipe's `version` in its file AND in src/lib/automation/recipes.ts.
+            - Refresh the baseline: npm run --silent companion -- canary --offline --write-baseline --recipe <id>
+              (if the portal is unreachable from here, update baseline.json by hand from the evidence).
+            - If the mock portal in companion/test/mock-portal.ts copies the real markup of the changed page,
+              update it to the new markup; leave the SIMULATED parts alone.
+            - Run npm run typecheck and npm run companion:test until both pass.
+            - Never copy citizen data into the repo. The evidence is redacted; keep it that way.
+            Finish with a short summary of what changed on the portal and in the recipe.
+
+      - name: Open the pull request
+        env:
+          GH_TOKEN: ${{ secrets.REPAIR_PR_TOKEN }}
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard -- companion src)" ]; then
+            echo "No changes proposed."; exit 0
+          fi
+          branch="recipe-repair/${RECIPE_ID:-canary}-${GITHUB_RUN_ID}"
+          git config user.name "arzidesk-recipe-repair"
+          git config user.email "recipe-repair@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add companion src
+          git commit -m "fix(recipes): repair ${RECIPE_ID:-canary drift}${STEP_ID:+ at $STEP_ID}"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --label recipe-repair \
+            --title "Recipe repair: ${RECIPE_ID:-canary drift}" \
+            --body "Automatic repair after portal drift (${{ github.event_name }}). Evidence: workflow run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. recipe-automerge decides whether this merges on green CI (read-only recipes) or waits for review (submit paths)."

@@ -1,0 +1,49 @@
+name: recipe-canary
+
+# Once a day, open every recipe's public portal pages headless and compare
+# their field inventories with the committed baselines. Drift starts a repair.
+# NIC sites may refuse GitHub's IPs: that reports "unreachable", not drift;
+# kiosk companions run the same canary from Indian IPs and report to ArziDesk.
+
+on:
+  schedule:
+    - cron: "30 3 * * *" # 09:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      drift: ${{ steps.run.outputs.drift }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - id: run
+        run: |
+          set +e
+          npm run --silent companion -- canary --offline --report canary-report.json
+          code=$?
+          echo "drift=$([ $code -eq 1 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          [ $code -le 1 ] || exit $code
+      - if: steps.run.outputs.drift == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-report
+          path: canary-report.json
+          retention-days: 14
+
+  repair:
+    needs: canary
+    if: needs.canary.outputs.drift == 'true'
+    uses: ./.github/workflows/recipe-repair.yml
+    with:
+      source: canary
+    secrets: inherit

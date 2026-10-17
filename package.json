@@ -17,7 +17,10 @@
     "typecheck": "tsc --noEmit",
     "check:auth": "node scripts/check-auth-invariant.mjs",
     "test": "node --test 'scripts/**/*.test.mjs' && npm run test:unit",
-    "test:unit": "node --experimental-strip-types --test src/lib/ai/*.test.ts src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/visitor-host.test.ts src/lib/admin/*.test.ts src/lib/billing/*.test.ts src/lib/desk/*.test.ts src/lib/wallet/*.test.ts src/lib/scroll-memory.test.ts",
+    "test:unit": "node --experimental-strip-types --test src/lib/ai/*.test.ts src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/visitor-host.test.ts src/lib/admin/*.test.ts src/lib/billing/*.test.ts src/lib/desk/*.test.ts src/lib/wallet/*.test.ts src/lib/automation/*.test.ts src/lib/scroll-memory.test.ts",
+    "companion": "node companion/src/cli.ts",
+    "companion:test": "node --test --test-concurrency=1 companion/test/*.test.ts",
+    "recipes:sign": "node scripts/sign-recipes.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

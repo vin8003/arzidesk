@@ -1,0 +1,10 @@
+# Anything that can submit on a portal, or decides how recipes run, needs the owner's review.
+# Read-only recipes (companion/recipes/read/) are deliberately absent: repairs to them may auto-merge.
+/companion/recipes/submit/      @vin8003
+/companion/recipes/fixtures/rtionline.file_rti/ @vin8003
+/companion/recipes/types.ts     @vin8003
+/companion/src/                 @vin8003
+/src/lib/automation/            @vin8003
+/scripts/recipe-pr-class.mjs    @vin8003
+/scripts/sign-recipes.mjs       @vin8003
+/.github/                       @vin8003

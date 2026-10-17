@@ -145,6 +145,35 @@ export function ApplicantFields({
         hint={hi ? "RTI फ़ीस नहीं लगती (धारा 7(5))। BPL कार्ड की प्रति लगाएँ।" : "No RTI fee under s.7(5). Attach a copy of the BPL card."}
       />
       {value.bpl ? <Text id="a-bplno" label={hi ? "BPL कार्ड संख्या" : "BPL card number"} value={value.bplCard} onChange={set("bplCard")} /> : null}
+      <Field>
+        <Label htmlFor="a-gender">{hi ? "लिंग" : "Gender"}</Label>
+        <Select id="a-gender" value={value.gender} onChange={(e) => set("gender")(e.target.value as Applicant["gender"])}>
+          <option value="">{hi ? "चुनें…" : "Choose…"}</option>
+          <option value="male">{hi ? "पुरुष" : "Male"}</option>
+          <option value="female">{hi ? "महिला" : "Female"}</option>
+          <option value="other">{hi ? "तृतीय लिंग" : "Third gender"}</option>
+        </Select>
+        <Hint>{hi ? "ऑनलाइन पोर्टल पूछते हैं।" : "Online portals ask for it."}</Hint>
+      </Field>
+      <Field>
+        <Label htmlFor="a-area">{hi ? "क्षेत्र" : "Area"}</Label>
+        <Select id="a-area" value={value.area} onChange={(e) => set("area")(e.target.value as Applicant["area"])}>
+          <option value="">{hi ? "चुनें…" : "Choose…"}</option>
+          <option value="rural">{hi ? "ग्रामीण" : "Rural"}</option>
+          <option value="urban">{hi ? "शहरी" : "Urban"}</option>
+        </Select>
+      </Field>
+      <Field>
+        <Label htmlFor="a-edu">{hi ? "शिक्षा" : "Education"}</Label>
+        <Select id="a-edu" value={value.education} onChange={(e) => set("education")(e.target.value as Applicant["education"])}>
+          <option value="">{hi ? "चुनें…" : "Choose…"}</option>
+          <option value="illiterate">{hi ? "निरक्षर" : "Illiterate"}</option>
+          <option value="below_12">{hi ? "12वीं से कम" : "Below 12th"}</option>
+          <option value="12">{hi ? "12वीं पास" : "12th pass"}</option>
+          <option value="graduate">{hi ? "स्नातक" : "Graduate"}</option>
+          <option value="above_graduate">{hi ? "स्नातक से ऊपर" : "Above graduate"}</option>
+        </Select>
+      </Field>
     </div>
   );
 }

@@ -1,0 +1,110 @@
+{
+  "kys_form": {
+    "fingerprint": "036bfafe27f58783",
+    "inventory": {
+      "url": "https://pmkisan.gov.in/BeneficiaryStatus_New.aspx",
+      "title": "Know Your Status :: PMKisan Samman Nidhi",
+      "fields": [
+        {
+          "key": "__EVENTTARGET",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "__EVENTTARGET",
+          "id": "__EVENTTARGET",
+          "required": false
+        },
+        {
+          "key": "__EVENTARGUMENT",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "__EVENTARGUMENT",
+          "id": "__EVENTARGUMENT",
+          "required": false
+        },
+        {
+          "key": "__VIEWSTATE",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "__VIEWSTATE",
+          "id": "__VIEWSTATE",
+          "required": false
+        },
+        {
+          "key": "__VIEWSTATEGENERATOR",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "__VIEWSTATEGENERATOR",
+          "id": "__VIEWSTATEGENERATOR",
+          "required": false
+        },
+        {
+          "key": "__EVENTVALIDATION",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "__EVENTVALIDATION",
+          "id": "__EVENTVALIDATION",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$txtBox",
+          "label": "Enter Registration No.",
+          "tag": "INPUT",
+          "type": "text",
+          "name": "ctl00$ContentPlaceHolder1$txtBox",
+          "id": "ContentPlaceHolder1_txtBox",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$txtcaptcha",
+          "label": "Captcha Code",
+          "tag": "INPUT",
+          "type": "text",
+          "name": "ctl00$ContentPlaceHolder1$txtcaptcha",
+          "id": "ContentPlaceHolder1_txtcaptcha",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$HDkeybytesVal",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "ctl00$ContentPlaceHolder1$HDkeybytesVal",
+          "id": "ContentPlaceHolder1_HDkeybytesVal",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$HiddenValSalt",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "ctl00$ContentPlaceHolder1$HiddenValSalt",
+          "id": "ContentPlaceHolder1_HiddenValSalt",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$HiddenField_OTP",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "ctl00$ContentPlaceHolder1$HiddenField_OTP",
+          "id": "ContentPlaceHolder1_HiddenField_OTP",
+          "required": false
+        },
+        {
+          "key": "ctl00$ContentPlaceHolder1$HiddenField_Search",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "ctl00$ContentPlaceHolder1$HiddenField_Search",
+          "id": "ContentPlaceHolder1_HiddenField_Search",
+          "required": false
+        }
+      ]
+    }
+  }
+}

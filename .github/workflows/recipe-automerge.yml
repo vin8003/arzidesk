@@ -1,0 +1,41 @@
+name: recipe-automerge
+
+# Merge policy for repair PRs, decided from changed paths only
+# (scripts/recipe-pr-class.mjs): read-only recipes auto-merge once required
+# checks pass; anything that can submit is labelled for human review.
+# Needs branch protection on main with the "ci / check" status required, and
+# "Allow auto-merge" on in the repository settings.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  classify:
+    if: startsWith(github.head_ref, 'recipe-repair/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: class
+        run: echo "kind=$(node scripts/recipe-pr-class.mjs origin/${{ github.base_ref }})" >> "$GITHUB_OUTPUT"
+      - name: Read-only recipe → auto-merge on green CI
+        if: steps.class.outputs.kind == 'read'
+        env:
+          GH_TOKEN: ${{ secrets.REPAIR_PR_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "recipe:read" --remove-label "needs-human-review" || true
+          gh pr merge ${{ github.event.pull_request.number }} --auto --squash
+      - name: Submit path → human review
+        if: steps.class.outputs.kind != 'read'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --disable-auto || true
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "needs-human-review" --remove-label "recipe:read" || true
+          gh pr comment ${{ github.event.pull_request.number }} --body "This repair touches a recipe that can submit on a portal (or code around it), so it needs a human review before merging. Check the diff against the evidence in the linked run; keep every human gate and the read-back check."
