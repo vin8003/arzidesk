@@ -380,6 +380,41 @@ test("streaming injector matches </HEAD> case-insensitively", () => {
   assert.match(out, /<body>hello<\/body>/);
 });
 
+test("omits the extensions script when the deployer disables it", () => {
+  const previous = process.env.VITE_GROK_EXTENSIONS;
+  process.env.VITE_GROK_EXTENSIONS = "0";
+  try {
+    const baked =
+      '<html><head><script src="https://grok.com/grok-app-builder/extensions.js" data-project-id="old" defer></script></head></html>';
+    const out = injectGrokPwaHead(baked, { appName: "Demo", projectId: "proj-123" });
+    assert.doesNotMatch(out, /grok-app-builder\/extensions\.js/);
+    assert.match(out, /name="grok-project-id" content="proj-123"/);
+    assert.match(out, /property="grok:app_id" content="proj-123"/);
+    assert.match(out, /rel="manifest"/);
+    const twice = injectGrokPwaHead(out, { appName: "Demo", projectId: "proj-123" });
+    assert.equal(out, twice);
+  } finally {
+    if (previous === undefined) delete process.env.VITE_GROK_EXTENSIONS;
+    else process.env.VITE_GROK_EXTENSIONS = previous;
+  }
+});
+
+test("keeps the extensions script on commercial when the deployer enables it", () => {
+  const previous = process.env.VITE_GROK_EXTENSIONS;
+  process.env.VITE_GROK_EXTENSIONS = "1";
+  try {
+    const out = injectGrokPwaHead("<html><head></head></html>", {
+      appName: "Demo",
+      projectId: "proj-123",
+    });
+    assert.match(out, /src="https:\/\/grok\.com\/grok-app-builder\/extensions\.js"/);
+    assert.match(out, /data-project-id="proj-123"/);
+  } finally {
+    if (previous === undefined) delete process.env.VITE_GROK_EXTENSIONS;
+    else process.env.VITE_GROK_EXTENSIONS = previous;
+  }
+});
+
 test("does not duplicate the extensions script", () => {
   const ctx = { appName: "Demo", projectId: "proj-123" };
   const once = injectGrokPwaHead("<html><head></head></html>", ctx);
