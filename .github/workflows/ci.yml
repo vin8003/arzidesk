@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: node --test scripts/recipe-pr-class.test.mjs
+      # Recipes end to end in headless Chrome against the mock portal (ubuntu runners ship Google Chrome).
+      - run: npm run companion:test

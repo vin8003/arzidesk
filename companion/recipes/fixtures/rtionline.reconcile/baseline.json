@@ -1,0 +1,69 @@
+{
+  "reconcile_form": {
+    "fingerprint": "ebafb74d6c29114d",
+    "inventory": {
+      "url": "https://rtionline.gov.in/request/status_pendingPayment.php",
+      "title": "RTI Online :: Online RTI Information System",
+      "fields": [
+        {
+          "key": "lan",
+          "label": "",
+          "tag": "SELECT",
+          "type": "select",
+          "name": "lan",
+          "id": "lan",
+          "required": false,
+          "options": [
+            "English",
+            "Hindi"
+          ]
+        },
+        {
+          "key": "hndbaseurl",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "hndbaseurl",
+          "id": "hndbaseurl",
+          "required": false
+        },
+        {
+          "key": "hndactionurl",
+          "label": "",
+          "tag": "INPUT",
+          "type": "hidden",
+          "name": "hndactionurl",
+          "id": "hndactionurl",
+          "required": false
+        },
+        {
+          "key": "Email",
+          "label": "* Enter Email Id (For receiving OTP)",
+          "tag": "INPUT",
+          "type": "text",
+          "name": "Email",
+          "id": "Email",
+          "required": true
+        },
+        {
+          "key": "cell",
+          "label": "Mobile Number",
+          "tag": "INPUT",
+          "type": "password",
+          "name": "cell",
+          "id": "cell",
+          "required": false
+        },
+        {
+          "key": "6_letters_code",
+          "label": "* Enter Security code",
+          "tag": "INPUT",
+          "type": "text",
+          "name": "6_letters_code",
+          "id": "6_letters_code",
+          "required": true
+        }
+      ]
+    }
+  }
+}

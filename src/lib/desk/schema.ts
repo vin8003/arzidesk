@@ -1,5 +1,18 @@
 import { z } from "zod";
-import { emptyApplicant, emptyDetails, FLOWS, RTI_MODES, SCHEMES, STATES, STEP_KINDS, type Applicant, type CaseDetails } from "./types.ts";
+import {
+  AREAS,
+  EDUCATIONS,
+  emptyApplicant,
+  emptyDetails,
+  FLOWS,
+  GENDERS,
+  RTI_MODES,
+  SCHEMES,
+  STATES,
+  STEP_KINDS,
+  type Applicant,
+  type CaseDetails,
+} from "./types.ts";
 
 const text = (max: number) =>
   z
@@ -25,6 +38,9 @@ export const applicantSchema = z.object({
   email: text(160),
   bpl: z.boolean().catch(false),
   bplCard: text(60),
+  gender: z.enum([...GENDERS, ""]).catch(""),
+  area: z.enum([...AREAS, ""]).catch(""),
+  education: z.enum([...EDUCATIONS, ""]).catch(""),
 });
 
 export const detailsSchema = z.object({

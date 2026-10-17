@@ -67,7 +67,18 @@ export type Applicant = {
   email: string;
   bpl: boolean;
   bplCard: string;
+  /** Asked by online portals (RTI Online, CPGRAMS). Empty until the operator sets it. */
+  gender: Gender | "";
+  area: Area | "";
+  education: Education | "";
 };
+
+export const GENDERS = ["male", "female", "other"] as const;
+export type Gender = (typeof GENDERS)[number];
+export const AREAS = ["rural", "urban"] as const;
+export type Area = (typeof AREAS)[number];
+export const EDUCATIONS = ["illiterate", "below_12", "12", "graduate", "above_graduate"] as const;
+export type Education = (typeof EDUCATIONS)[number];
 
 export const emptyApplicant = (): Applicant => ({
   name: "",
@@ -81,6 +92,9 @@ export const emptyApplicant = (): Applicant => ({
   email: "",
   bpl: false,
   bplCard: "",
+  gender: "",
+  area: "",
+  education: "",
 });
 
 /** Flow-specific facts. Every field is optional text so one shape serves all three flows. */

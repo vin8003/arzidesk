@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CompanionRouteImport } from './routes/companion'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -23,9 +24,20 @@ import { Route as CasesIndexRouteImport } from './routes/cases.index'
 import { Route as CasesIdRouteImport } from './routes/cases.$id'
 import { Route as CasesNewRouteImport } from './routes/cases.new'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiAutomationRepairBundleRouteImport } from './routes/api/automation.repair-bundle'
 import { Route as ApiBillingRazorpayRouteImport } from './routes/api/billing.razorpay'
 import { Route as ApiCronAutoAppealsRouteImport } from './routes/api/cron.auto-appeals'
+import { Route as ApiRunnerCanaryRouteImport } from './routes/api/runner.canary'
+import { Route as ApiRunnerClaimRouteImport } from './routes/api/runner.claim'
+import { Route as ApiRunnerManifestRouteImport } from './routes/api/runner.manifest'
+import { Route as ApiRunnerMapRouteImport } from './routes/api/runner.map'
+import { Route as ApiRunnerPairRouteImport } from './routes/api/runner.pair'
 import { Route as PrintIdKindRouteImport } from './routes/print.$id.$kind'
+import { Route as ApiAutomationArtifactIdRouteImport } from './routes/api/automation.artifact.$id'
+import { Route as ApiRunnerRecipeIdRouteImport } from './routes/api/runner.recipe.$id'
+import { Route as ApiRunnerJobsIdArtifactsRouteImport } from './routes/api/runner.jobs.$id.artifacts'
+import { Route as ApiRunnerJobsIdFinishRouteImport } from './routes/api/runner.jobs.$id.finish'
+import { Route as ApiRunnerJobsIdProgressRouteImport } from './routes/api/runner.jobs.$id.progress'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanionRoute = CompanionRouteImport.update({
+  id: '/companion',
+  path: '/companion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -97,6 +114,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAutomationRepairBundleRoute =
+  ApiAutomationRepairBundleRouteImport.update({
+    id: '/api/automation/repair-bundle',
+    path: '/api/automation/repair-bundle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiBillingRazorpayRoute = ApiBillingRazorpayRouteImport.update({
   id: '/api/billing/razorpay',
   path: '/api/billing/razorpay',
@@ -107,15 +130,67 @@ const ApiCronAutoAppealsRoute = ApiCronAutoAppealsRouteImport.update({
   path: '/api/cron/auto-appeals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRunnerCanaryRoute = ApiRunnerCanaryRouteImport.update({
+  id: '/api/runner/canary',
+  path: '/api/runner/canary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerClaimRoute = ApiRunnerClaimRouteImport.update({
+  id: '/api/runner/claim',
+  path: '/api/runner/claim',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerManifestRoute = ApiRunnerManifestRouteImport.update({
+  id: '/api/runner/manifest',
+  path: '/api/runner/manifest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerMapRoute = ApiRunnerMapRouteImport.update({
+  id: '/api/runner/map',
+  path: '/api/runner/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerPairRoute = ApiRunnerPairRouteImport.update({
+  id: '/api/runner/pair',
+  path: '/api/runner/pair',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrintIdKindRoute = PrintIdKindRouteImport.update({
   id: '/print/$id/$kind',
   path: '/print/$id/$kind',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAutomationArtifactIdRoute = ApiAutomationArtifactIdRouteImport.update({
+  id: '/api/automation/artifact/$id',
+  path: '/api/automation/artifact/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerRecipeIdRoute = ApiRunnerRecipeIdRouteImport.update({
+  id: '/api/runner/recipe/$id',
+  path: '/api/runner/recipe/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerJobsIdArtifactsRoute =
+  ApiRunnerJobsIdArtifactsRouteImport.update({
+    id: '/api/runner/jobs/$id/artifacts',
+    path: '/api/runner/jobs/$id/artifacts',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiRunnerJobsIdFinishRoute = ApiRunnerJobsIdFinishRouteImport.update({
+  id: '/api/runner/jobs/$id/finish',
+  path: '/api/runner/jobs/$id/finish',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRunnerJobsIdProgressRoute = ApiRunnerJobsIdProgressRouteImport.update({
+  id: '/api/runner/jobs/$id/progress',
+  path: '/api/runner/jobs/$id/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/companion': typeof CompanionRoute
   '/login': typeof LoginRoute
   '/wallet': typeof WalletRoute
   '/admin/login': typeof AdminLoginRoute
@@ -128,12 +203,24 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/cases/': typeof CasesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/automation/repair-bundle': typeof ApiAutomationRepairBundleRoute
   '/api/billing/razorpay': typeof ApiBillingRazorpayRoute
   '/api/cron/auto-appeals': typeof ApiCronAutoAppealsRoute
+  '/api/runner/canary': typeof ApiRunnerCanaryRoute
+  '/api/runner/claim': typeof ApiRunnerClaimRoute
+  '/api/runner/manifest': typeof ApiRunnerManifestRoute
+  '/api/runner/map': typeof ApiRunnerMapRoute
+  '/api/runner/pair': typeof ApiRunnerPairRoute
   '/print/$id/$kind': typeof PrintIdKindRoute
+  '/api/automation/artifact/$id': typeof ApiAutomationArtifactIdRoute
+  '/api/runner/recipe/$id': typeof ApiRunnerRecipeIdRoute
+  '/api/runner/jobs/$id/artifacts': typeof ApiRunnerJobsIdArtifactsRoute
+  '/api/runner/jobs/$id/finish': typeof ApiRunnerJobsIdFinishRoute
+  '/api/runner/jobs/$id/progress': typeof ApiRunnerJobsIdProgressRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/companion': typeof CompanionRoute
   '/login': typeof LoginRoute
   '/wallet': typeof WalletRoute
   '/admin/login': typeof AdminLoginRoute
@@ -146,14 +233,26 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/cases': typeof CasesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/automation/repair-bundle': typeof ApiAutomationRepairBundleRoute
   '/api/billing/razorpay': typeof ApiBillingRazorpayRoute
   '/api/cron/auto-appeals': typeof ApiCronAutoAppealsRoute
+  '/api/runner/canary': typeof ApiRunnerCanaryRoute
+  '/api/runner/claim': typeof ApiRunnerClaimRoute
+  '/api/runner/manifest': typeof ApiRunnerManifestRoute
+  '/api/runner/map': typeof ApiRunnerMapRoute
+  '/api/runner/pair': typeof ApiRunnerPairRoute
   '/print/$id/$kind': typeof PrintIdKindRoute
+  '/api/automation/artifact/$id': typeof ApiAutomationArtifactIdRoute
+  '/api/runner/recipe/$id': typeof ApiRunnerRecipeIdRoute
+  '/api/runner/jobs/$id/artifacts': typeof ApiRunnerJobsIdArtifactsRoute
+  '/api/runner/jobs/$id/finish': typeof ApiRunnerJobsIdFinishRoute
+  '/api/runner/jobs/$id/progress': typeof ApiRunnerJobsIdProgressRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/companion': typeof CompanionRoute
   '/login': typeof LoginRoute
   '/wallet': typeof WalletRoute
   '/admin/login': typeof AdminLoginRoute
@@ -166,15 +265,27 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/cases/': typeof CasesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/automation/repair-bundle': typeof ApiAutomationRepairBundleRoute
   '/api/billing/razorpay': typeof ApiBillingRazorpayRoute
   '/api/cron/auto-appeals': typeof ApiCronAutoAppealsRoute
+  '/api/runner/canary': typeof ApiRunnerCanaryRoute
+  '/api/runner/claim': typeof ApiRunnerClaimRoute
+  '/api/runner/manifest': typeof ApiRunnerManifestRoute
+  '/api/runner/map': typeof ApiRunnerMapRoute
+  '/api/runner/pair': typeof ApiRunnerPairRoute
   '/print/$id/$kind': typeof PrintIdKindRoute
+  '/api/automation/artifact/$id': typeof ApiAutomationArtifactIdRoute
+  '/api/runner/recipe/$id': typeof ApiRunnerRecipeIdRoute
+  '/api/runner/jobs/$id/artifacts': typeof ApiRunnerJobsIdArtifactsRoute
+  '/api/runner/jobs/$id/finish': typeof ApiRunnerJobsIdFinishRoute
+  '/api/runner/jobs/$id/progress': typeof ApiRunnerJobsIdProgressRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/companion'
     | '/login'
     | '/wallet'
     | '/admin/login'
@@ -187,12 +298,24 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/cases/'
     | '/api/auth/$'
+    | '/api/automation/repair-bundle'
     | '/api/billing/razorpay'
     | '/api/cron/auto-appeals'
+    | '/api/runner/canary'
+    | '/api/runner/claim'
+    | '/api/runner/manifest'
+    | '/api/runner/map'
+    | '/api/runner/pair'
     | '/print/$id/$kind'
+    | '/api/automation/artifact/$id'
+    | '/api/runner/recipe/$id'
+    | '/api/runner/jobs/$id/artifacts'
+    | '/api/runner/jobs/$id/finish'
+    | '/api/runner/jobs/$id/progress'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/companion'
     | '/login'
     | '/wallet'
     | '/admin/login'
@@ -205,13 +328,25 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cases'
     | '/api/auth/$'
+    | '/api/automation/repair-bundle'
     | '/api/billing/razorpay'
     | '/api/cron/auto-appeals'
+    | '/api/runner/canary'
+    | '/api/runner/claim'
+    | '/api/runner/manifest'
+    | '/api/runner/map'
+    | '/api/runner/pair'
     | '/print/$id/$kind'
+    | '/api/automation/artifact/$id'
+    | '/api/runner/recipe/$id'
+    | '/api/runner/jobs/$id/artifacts'
+    | '/api/runner/jobs/$id/finish'
+    | '/api/runner/jobs/$id/progress'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/companion'
     | '/login'
     | '/wallet'
     | '/admin/login'
@@ -224,14 +359,26 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/cases/'
     | '/api/auth/$'
+    | '/api/automation/repair-bundle'
     | '/api/billing/razorpay'
     | '/api/cron/auto-appeals'
+    | '/api/runner/canary'
+    | '/api/runner/claim'
+    | '/api/runner/manifest'
+    | '/api/runner/map'
+    | '/api/runner/pair'
     | '/print/$id/$kind'
+    | '/api/automation/artifact/$id'
+    | '/api/runner/recipe/$id'
+    | '/api/runner/jobs/$id/artifacts'
+    | '/api/runner/jobs/$id/finish'
+    | '/api/runner/jobs/$id/progress'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  CompanionRoute: typeof CompanionRoute
   LoginRoute: typeof LoginRoute
   WalletRoute: typeof WalletRoute
   ApiCreateOrderRoute: typeof ApiCreateOrderRoute
@@ -240,9 +387,20 @@ export interface RootRouteChildren {
   CasesNewRoute: typeof CasesNewRoute
   CasesIndexRoute: typeof CasesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiAutomationRepairBundleRoute: typeof ApiAutomationRepairBundleRoute
   ApiBillingRazorpayRoute: typeof ApiBillingRazorpayRoute
   ApiCronAutoAppealsRoute: typeof ApiCronAutoAppealsRoute
+  ApiRunnerCanaryRoute: typeof ApiRunnerCanaryRoute
+  ApiRunnerClaimRoute: typeof ApiRunnerClaimRoute
+  ApiRunnerManifestRoute: typeof ApiRunnerManifestRoute
+  ApiRunnerMapRoute: typeof ApiRunnerMapRoute
+  ApiRunnerPairRoute: typeof ApiRunnerPairRoute
   PrintIdKindRoute: typeof PrintIdKindRoute
+  ApiAutomationArtifactIdRoute: typeof ApiAutomationArtifactIdRoute
+  ApiRunnerRecipeIdRoute: typeof ApiRunnerRecipeIdRoute
+  ApiRunnerJobsIdArtifactsRoute: typeof ApiRunnerJobsIdArtifactsRoute
+  ApiRunnerJobsIdFinishRoute: typeof ApiRunnerJobsIdFinishRoute
+  ApiRunnerJobsIdProgressRoute: typeof ApiRunnerJobsIdProgressRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -259,6 +417,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companion': {
+      id: '/companion'
+      path: '/companion'
+      fullPath: '/companion'
+      preLoaderRoute: typeof CompanionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -345,6 +510,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/automation/repair-bundle': {
+      id: '/api/automation/repair-bundle'
+      path: '/api/automation/repair-bundle'
+      fullPath: '/api/automation/repair-bundle'
+      preLoaderRoute: typeof ApiAutomationRepairBundleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/billing/razorpay': {
       id: '/api/billing/razorpay'
       path: '/api/billing/razorpay'
@@ -359,11 +531,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCronAutoAppealsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/runner/canary': {
+      id: '/api/runner/canary'
+      path: '/api/runner/canary'
+      fullPath: '/api/runner/canary'
+      preLoaderRoute: typeof ApiRunnerCanaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/claim': {
+      id: '/api/runner/claim'
+      path: '/api/runner/claim'
+      fullPath: '/api/runner/claim'
+      preLoaderRoute: typeof ApiRunnerClaimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/manifest': {
+      id: '/api/runner/manifest'
+      path: '/api/runner/manifest'
+      fullPath: '/api/runner/manifest'
+      preLoaderRoute: typeof ApiRunnerManifestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/map': {
+      id: '/api/runner/map'
+      path: '/api/runner/map'
+      fullPath: '/api/runner/map'
+      preLoaderRoute: typeof ApiRunnerMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/pair': {
+      id: '/api/runner/pair'
+      path: '/api/runner/pair'
+      fullPath: '/api/runner/pair'
+      preLoaderRoute: typeof ApiRunnerPairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/print/$id/$kind': {
       id: '/print/$id/$kind'
       path: '/print/$id/$kind'
       fullPath: '/print/$id/$kind'
       preLoaderRoute: typeof PrintIdKindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/automation/artifact/$id': {
+      id: '/api/automation/artifact/$id'
+      path: '/api/automation/artifact/$id'
+      fullPath: '/api/automation/artifact/$id'
+      preLoaderRoute: typeof ApiAutomationArtifactIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/recipe/$id': {
+      id: '/api/runner/recipe/$id'
+      path: '/api/runner/recipe/$id'
+      fullPath: '/api/runner/recipe/$id'
+      preLoaderRoute: typeof ApiRunnerRecipeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/jobs/$id/artifacts': {
+      id: '/api/runner/jobs/$id/artifacts'
+      path: '/api/runner/jobs/$id/artifacts'
+      fullPath: '/api/runner/jobs/$id/artifacts'
+      preLoaderRoute: typeof ApiRunnerJobsIdArtifactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/jobs/$id/finish': {
+      id: '/api/runner/jobs/$id/finish'
+      path: '/api/runner/jobs/$id/finish'
+      fullPath: '/api/runner/jobs/$id/finish'
+      preLoaderRoute: typeof ApiRunnerJobsIdFinishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/runner/jobs/$id/progress': {
+      id: '/api/runner/jobs/$id/progress'
+      path: '/api/runner/jobs/$id/progress'
+      fullPath: '/api/runner/jobs/$id/progress'
+      preLoaderRoute: typeof ApiRunnerJobsIdProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -388,6 +630,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  CompanionRoute: CompanionRoute,
   LoginRoute: LoginRoute,
   WalletRoute: WalletRoute,
   ApiCreateOrderRoute: ApiCreateOrderRoute,
@@ -396,9 +639,20 @@ const rootRouteChildren: RootRouteChildren = {
   CasesNewRoute: CasesNewRoute,
   CasesIndexRoute: CasesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiAutomationRepairBundleRoute: ApiAutomationRepairBundleRoute,
   ApiBillingRazorpayRoute: ApiBillingRazorpayRoute,
   ApiCronAutoAppealsRoute: ApiCronAutoAppealsRoute,
+  ApiRunnerCanaryRoute: ApiRunnerCanaryRoute,
+  ApiRunnerClaimRoute: ApiRunnerClaimRoute,
+  ApiRunnerManifestRoute: ApiRunnerManifestRoute,
+  ApiRunnerMapRoute: ApiRunnerMapRoute,
+  ApiRunnerPairRoute: ApiRunnerPairRoute,
   PrintIdKindRoute: PrintIdKindRoute,
+  ApiAutomationArtifactIdRoute: ApiAutomationArtifactIdRoute,
+  ApiRunnerRecipeIdRoute: ApiRunnerRecipeIdRoute,
+  ApiRunnerJobsIdArtifactsRoute: ApiRunnerJobsIdArtifactsRoute,
+  ApiRunnerJobsIdFinishRoute: ApiRunnerJobsIdFinishRoute,
+  ApiRunnerJobsIdProgressRoute: ApiRunnerJobsIdProgressRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

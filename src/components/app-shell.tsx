@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { FilePlus2, FolderOpen, LayoutDashboard, Wallet } from "lucide-react";
+import { FilePlus2, FolderOpen, LayoutDashboard, MonitorSmartphone, Wallet } from "lucide-react";
 import { AccountMenu } from "@/components/account-menu";
 import { BrandMark } from "@/components/brand-mark";
 import { WalletChip } from "@/components/wallet-chip";
@@ -15,13 +15,14 @@ const NAV = [
   { to: "/cases", key: "cases", icon: FolderOpen },
   { to: "/cases/new", key: "new", icon: FilePlus2 },
   { to: "/wallet", key: "wallet", icon: Wallet },
+  { to: "/companion", key: "companion", icon: MonitorSmartphone },
 ] as const;
 
 export type NavKey = (typeof NAV)[number]["key"];
 
 const LABELS: Record<OutputLang, Record<NavKey, string>> = {
-  en: { today: "Today", cases: "Cases", new: "New filing", wallet: "Wallet" },
-  hi: { today: "आज", cases: "केस", new: "नई फ़ाइलिंग", wallet: "वॉलेट" },
+  en: { today: "Today", cases: "Cases", new: "New filing", wallet: "Wallet", companion: "Companion" },
+  hi: { today: "आज", cases: "केस", new: "नई फ़ाइलिंग", wallet: "वॉलेट", companion: "कम्पैनियन" },
 };
 
 let adminCache: { userId: string; admin: boolean } | null = null;

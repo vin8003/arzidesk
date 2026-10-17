@@ -1,0 +1,20 @@
+{
+  "guidelines": {
+    "fingerprint": "180d0b4b091164fb",
+    "inventory": {
+      "url": "https://rtionline.gov.in/guidelines.php",
+      "title": "RTI Online :: Guidelines for use of RTI Online Portal",
+      "fields": [
+        {
+          "key": "CHECKBOX_1",
+          "label": "I have read and understood the above guidelines.",
+          "tag": "INPUT",
+          "type": "checkbox",
+          "name": "CHECKBOX_1",
+          "id": "",
+          "required": false
+        }
+      ]
+    }
+  }
+}

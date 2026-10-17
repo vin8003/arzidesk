@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle, Check, ChevronDown, Copy, Printer, RefreshCw, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { AutoFilePanel } from "@/components/auto-file-panel";
 import { DueBadge } from "@/components/case-row";
 import { StepGuide } from "@/components/step-guide";
 import { Badge, type BadgeTone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, Hint, Input, Label, Select, Textarea } from "@/components/ui/field";
+import type { AutomationView } from "@/lib/automation/store";
 import { formatDay } from "@/lib/dates";
 import { countChars, countWords, nonAsciiCount } from "@/lib/desk/assemble";
 import { MODE_COPY, OUTCOME_COPY, PHASE_COPY, STEP_COPY, t } from "@/lib/desk/copy";
@@ -60,6 +62,8 @@ export function StepCard({
   today,
   prices,
   onBundle,
+  automation,
+  onAutomation,
 }: {
   bundle: CaseBundle;
   view: StepView;
@@ -69,6 +73,9 @@ export function StepCard({
   today: string;
   prices: PriceList | null;
   onBundle: (next: CaseBundle) => void;
+  automation: AutomationView | null;
+  /** Something changed on the automation side (job started, cancelled, reconciled): refetch. */
+  onAutomation: () => void;
 }) {
   const hi = lang === "hi";
   const { record } = bundle;
@@ -541,6 +548,8 @@ export function StepCard({
                 ) : null}
               </>
             ) : null}
+
+            <AutoFilePanel record={record} kind={kind} automation={automation} lang={lang} onChanged={onAutomation} />
 
             {SKIPPABLE.has(kind) && !filed ? (
               <div className="mt-4 text-right">
